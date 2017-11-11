@@ -1,0 +1,9 @@
+server:
+    port: 80
+
+blockchain:
+    address: "http://cryptonomy.eu:8545"
+
+couchbase:
+    password: "cryptonomy"
+
