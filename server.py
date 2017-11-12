@@ -37,7 +37,7 @@ class Application(tornado.web.Application):
 		handlers = [
 			(r"/", MainHandler),
 			(r"/static/(.*)", tornado.web.StaticFileHandler),
-			(r"/static/css(.*)", tornado.web.StaticFileHandler)
+			(r"/static/css(.*)", tornado.web.StaticFileHandler),
 			#(r"/dashboard", DashboardHandler),
 			#(r"/dashboardWithSession", DashboardSessionHandler),
 			#(r"/login", LoginHandler),
@@ -45,7 +45,9 @@ class Application(tornado.web.Application):
 			#(r"/updateAccount", UpdateAccForWalletHandler),
 			#(r"/logout", LogoutHandler),
 
-			#(r"/account", AccountHandler),
+			(r"/account", AccountHandler),
+			(r"/newWebsiteRequest", WebsiteHandler),
+			(r"/websiteAvailable", WebsiteHandler)
 			#(r"/walletHandler", WalletHandler),
 			#(r"/walletAmountHandler", WalletAmountHandler),
 			#(r"/updateDashboard", WS_UpdateDashboardHandler)
@@ -72,6 +74,88 @@ class MainHandler(BaseDatabaseHandler):
 	def get(self):
 		self.render("index.html")
 
+class AccountHandler(BaseDatabaseHandler):
+
+	@gen.coroutine
+	def post(self):
+		try:
+			
+			data = json.loads(self.request.body)
+			cursor = yield self.db.execute("SELECT * FROM benutzer;",(1,))
+
+			userTaken = False;
+
+			for user in cursor:
+				if user[1] == data['Username']: #Check if username is already taken
+					print("User already taken")
+					userTaken = True;
+					self.set_status(401)
+					break;
+				else:
+					userTaken = False;
+
+			if userTaken == False:
+				#self.hashing.update(data['Username'])
+				#userhash = self.hashing.hexdigest()
+				cursorUser = yield self.db.execute("INSERT INTO benutzer(benutzername, passwort) VALUES('"+data['Username']+"', '"+data['Password']+"');")
+				cursorStimme = yield self.db.execute("INSERT INTO stimme(benutzername, einfluss) VALUES('"+data['Username']+"', 0.0)")
+				#self.cb.createNewUserDocument(userhash, data['Username'])
+				self.set_status(202, "User created! Well played")
+
+
+		except Exception as error:
+			self.set_status(401)
+			self.write(str(error))
+			print(error)
+
+class WebsiteHandler(BaseDatabaseHandler):
+
+	@gen.coroutine
+	def post(self):
+
+		try:
+			data = json.loads(self.request.body)
+
+			websiteRequest = yield self.db.execute("SELECT * FROM webseitenanfrage;",(1,))
+			websiteTaken = False;
+				
+			website = yield self.db.execute("INSERT INTO webseitenanfrage(url, webname, land) VALUES('"+data['URL']+"', '"+data['Webname']+"', '"+data['Land']+"');")
+			self.set_status(202, "WebsiteRequest created! Well played!")
+
+		except Exception as error:
+			self.set_status(403)
+			self.write("Webseite bereits vorhanden!")
+			print(error)
+
+	@gen.coroutine
+	def get(self):
+
+		try:
+
+			websiteRequest = yield self.db.execute("SELECT * FROM webseitenanfrage;",(0,))
+
+			websiteAvailable = {}
+
+			for website in websiteRequest:
+
+				#websiteAvailable['ID'] = website[0]
+
+				data = {
+					#websiteAvailable['URL'] = website[1]
+					'URL' : website[1],
+					'Webname' : website[3],
+					'Country' : website[4]
+					#websiteAvailable['Webname'] = website[2]
+					#websiteAvailable['Country'] = website[3]
+				}
+				websiteAvailable.update({website[0]:data})
+
+			json_data = json.dumps(websiteAvailable)
+			self.write(json_data)
+			#print(json_data)
+
+		except Exception as error:
+			print(error)
 
 def main():
 	try:
