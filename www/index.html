@@ -29,7 +29,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto" id="navbar_top">
             <li class="nav-item active">
               <a class="nav-link" href="#">Home
                 <span class="sr-only">(current)</span>
@@ -44,6 +44,7 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Contact</a>
             </li>
+            
           </ul>
         </div>
       </div>
@@ -60,16 +61,18 @@
           <div class="list-group">
             <!--a href="#" class="list-group-item">Category 1</a>
             <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a-->
-            <a> <button id="b_addtemplate" type="button" class="btn btn-primary list-group-item" style="color: black">Add Template</button></a>
-            <a> <button id="b_adduser" type="button" class="btn btn-primary list-group-item" style="color: black">Add User</button></a>
-            <a> <input type="input" name="username" id="t_username" class="list-group-item" style="color: black" placeholder="Type your Username"></input></a>
-            <a> <input type="password" name="password" id="t_password" class="list-group-item" style="color: black" placeholder="Type your Password"></input></a>
+            <a href="#" class="list-group-item">Category 3</a>
+            <a><button id="b_addtemplate" type="button" class="btn btn-primary list-group-item" style="color: black">Add Template</button></a-->
+            <a><button id="b_adduser" type="button" class="btn btn-primary list-group-item" style="color: black">Add User</button></a>
+            <a><button id="b_addadmin" type="button" class="btn btn-primary list-group-item" style="color: black">Add User as Admin</button></a>
+            <a><input type="input" name="username" id="t_username" class="list-group-item" style="color: black" placeholder="Username"></input></a>
+            <a><input type="password" name="password" id="t_password" class="list-group-item" style="color: black" placeholder="Password"></input></a>
             <hr>
             <a> <button id="b_addWebsiteRequest" type="button" class="btn btn-primary list-group-item" style="color: black">Add WebsiteRequest</button></a>
             <a> <input type="input" name="url" id="t_url" class="list-group-item" style="color: black" placeholder="Type URL"></input></a>
             <a> <input type="input" name="webname" id="t_webname" class="list-group-item" style="color: black" placeholder="Type Webname"></input></a>
             <a> <input type="input" name="country" id="t_country" class="list-group-item" style="color: black" placeholder="Type Country"></input></a>
+            <hr>
           </div>
 
         </div>
@@ -130,8 +133,10 @@
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <script type="text/javascript" src="static/js/mainPage.js"></script>
     <script src="static/js/template_manager.js"></script>
     <script src="static/js/user_manager.js"></script>
+    
 
 
   </body>
